@@ -1,0 +1,30 @@
+
+b=Bluetooth('BlueScope',1);
+            fs=860;
+            t=0:1/fs:1-1/fs;
+            b.InputBufferSize=860;
+            fopen(b);
+            flushinput(b);
+            x=fread(b);
+            signal=6*x/255;
+            s=max(signal);
+            plot(app.UIAxes3,t,signal,'r');
+            title(app.UIAxes3,['Amplitude = ',num2str(s),' Volts']);
+            app.UIAxes3.XLim = [0 1];
+            app.UIAxes3.YLim = [-7 7];
+            [Pxx,f] = pwelch(signal,500,300,500,fs,'centered');
+            plot(app.UIAxes4,f,Pxx,'r');
+            app.UIAxes4.XLim = [-120 120];
+            ylabel(app.UIAxes4,'PSD'); xlabel(app.UIAxes4,'Frequency (Hz)');
+            grid on;
+            [~,loc] = max(Pxx);
+            FREQ_ESTIMATE = f(loc);
+            if(FREQ_ESTIMATE==0)
+               [pks,locs] = findpeaks(Pxx,f,'SortStr','descend');
+                FREQ=abs(locs(2))
+                title(app.UIAxes4,['Frequency estimate = ',num2str(FREQ),' Hz']);
+            else
+                 title(app.UIAxes4,['Frequency estimate = ',num2str(FREQ_ESTIMATE),' Hz']);
+            end
+            fclose(b);
+        end
