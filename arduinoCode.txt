@@ -1,0 +1,9 @@
+void setup()
+{
+ Serial.begin(9600);   //Baud rate of the Bluetooth moddule is 9600
+}
+
+void loop()
+{
+ Serial.write(analogRead(A0)); //read the analog signal on pin A0 and send its digital equivalent byte to Bluetooth module
+}
